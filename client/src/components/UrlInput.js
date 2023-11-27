@@ -38,7 +38,7 @@ function UrlInput({ onSubmit }) {
   };
 
   return (
-    <div>
+    <div className="urlinput">
       <form onSubmit={handleSubmit}>
         <input
           type="text"

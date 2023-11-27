@@ -56,11 +56,12 @@ input[type="text"] {
 }
 
 button {
+  margin-top: 20px;
   padding: 10px 15px;
   border: none;
   background-color: #007bff;
   color: #fff;
-  border-radius: 50%; /* Circular button */
+  border-radius: 10%; /* Circular button */
   cursor: pointer;
 }
 
@@ -96,6 +97,10 @@ input[type="text"] {
   margin-right: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+.urlinput {
+  min-width: 600px;
 }
 
 .initial-message {
