@@ -11,9 +11,21 @@ PROMPT_LIMIT = 3750
 CHATGPT_MODEL = 'gpt-4-1106-preview'
 
 def get_embedding(chunk):
-  response = openai_client.embeddings.create(
-      input=chunk, model=OPENAI_EMBEDDING_MODEL)
-  embedding = response.data[0].embedding
+  url = 'https://api.openai.com/v1/embeddings'
+  headers = {
+      'content-type': 'application/json; charset=utf-8',
+      'Authorization': f"Bearer {OPENAI_API_KEY}"            
+  }
+  data = {
+      'model': OPENAI_EMBEDDING_MODEL,
+      'input': chunk
+  }
+  response = requests.post(url, headers=headers, data=json.dumps(data))  
+  response_json = response.json()
+  embedding = response_json["data"][0]["embedding"]
+  # response = openai_client.embeddings.create(
+  #     input=chunk, model=OPENAI_EMBEDDING_MODEL)
+  # embedding = response.data[0].embedding
   return embedding
 
 def get_llm_answer(prompt, chat_history):
