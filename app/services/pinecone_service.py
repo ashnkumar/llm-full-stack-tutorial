@@ -4,7 +4,6 @@ import os
 
 PINECONE_API_KEY = os.environ.get('PINECONE_API_KEY')
 pinecone.init(api_key=PINECONE_API_KEY, environment='gcp-starter')
-
 EMBEDDING_DIMENSION = 1536
 
 def embed_chunks_and_upload_to_pinecone(chunks, index_name):
@@ -17,7 +16,6 @@ def embed_chunks_and_upload_to_pinecone(chunks, index_name):
                           dimension=EMBEDDING_DIMENSION, metric='cosine')
 
     index = pinecone.Index(index_name)
-    # print(index.describe_index_stats())
 
     # Embedding each chunk and preparing for upload
     print("\nEmbedding chunks using OpenAI ...")
@@ -50,5 +48,3 @@ def delete_index(index_name):
     print(f"Index {index_name} deleted successfully")
   else:
      print("\nNo index to delete!")
-  
-
