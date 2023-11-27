@@ -8,7 +8,6 @@ pinecone.init(api_key=PINECONE_API_KEY, environment='gcp-starter')
 EMBEDDING_DIMENSION = 1536
 
 def embed_chunks_and_upload_to_pinecone(chunks, index_name):
-    
     if index_name in pinecone.list_indexes():
         print("\nIndex already exists. Deleting index ...")
         pinecone.delete_index(name=index_name)
@@ -45,6 +44,11 @@ def get_most_similar_chunks_for_query(query, index_name):
     return context_chunks   
 
 def delete_index(index_name):
-  pinecone.delete_index(name=index_name)
-  print(f"Index {index_name} deleted successfully")
+  if index_name in pinecone.list_indexes():
+    print("\nDeleting index ...")
+    pinecone.delete_index(name=index_name)
+    print(f"Index {index_name} deleted successfully")
+  else:
+     print("\nNo index to delete!")
+  
 

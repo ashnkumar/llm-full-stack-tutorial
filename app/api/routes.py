@@ -8,11 +8,12 @@ PINECONE_INDEX_NAME = 'index237'
 @api_blueprint.route('/handle-query', methods=['POST'])
 def handle_query():
     question = request.json['question']
+    chat_history = request.json['chatHistory']
     context_chunks = pinecone_service.get_most_similar_chunks_for_query(question, PINECONE_INDEX_NAME)
     prompt = build_prompt(question, context_chunks)
     print("\n==== PROMPT ====\n")
     print(prompt)
-    answer = openai_service.get_llm_answer(prompt)
+    answer = openai_service.get_llm_answer(prompt, chat_history)
     return jsonify({ "question": question, "answer": answer })    
 
 
