@@ -48,7 +48,7 @@ function UrlInput({ onSubmit }) {
           required
         />
         <button type="submit" disabled={loading}>
-          {loading ? 'Loading...' : 'Submit'}
+          {loading ? 'Building Index...' : 'Submit'}
         </button>
       </form>
       {responseMessage && <p>{responseMessage}</p>}

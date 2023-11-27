@@ -1,7 +1,10 @@
 from . import api_blueprint
-from flask import request, jsonify
+import os
+from flask import request, jsonify, Response, stream_with_context, json
+import requests
+import sseclient
 from app.services import openai_service, pinecone_service, scraping_service
-from app.utils.helper_functions import chunk_text, build_prompt
+from app.utils.helper_functions import chunk_text, build_prompt, construct_messages_list
 
 PINECONE_INDEX_NAME = 'index237'
 
@@ -9,13 +12,28 @@ PINECONE_INDEX_NAME = 'index237'
 def handle_query():
     question = request.json['question']
     chat_history = request.json['chatHistory']
+    
+    # Get the most similar chunks from Pinecone
     context_chunks = pinecone_service.get_most_similar_chunks_for_query(question, PINECONE_INDEX_NAME)
-    prompt = build_prompt(question, context_chunks)
-    print("\n==== PROMPT ====\n")
-    print(prompt)
-    answer = openai_service.get_llm_answer(prompt, chat_history)
-    return jsonify({ "question": question, "answer": answer })    
+    
+    # Build the payload to send to OpenAI
+    headers, data = openai_service.construct_llm_payload(question, context_chunks, chat_history)
 
+    # Send to OpenAI's LLM to generate a completion
+    def generate():
+        url = 'https://api.openai.com/v1/chat/completions'
+        response = requests.post(url, headers=headers, data=json.dumps(data), stream=True)
+        client = sseclient.SSEClient(response)
+        for event in client.events():
+            if event.data != '[DONE]':
+                try:
+                    text = json.loads(event.data)['choices'][0]['delta']['content']
+                    yield(text)
+                except:
+                    yield('')
+    
+    # Return the streamed response from the LLM to the frontend
+    return Response(stream_with_context(generate()))
 
 @api_blueprint.route('/embed-and-store', methods=['POST'])
 def embed_and_store():

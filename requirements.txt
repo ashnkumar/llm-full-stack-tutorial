@@ -6,3 +6,4 @@ pinecone-client
 flask-cors
 python-dotenv
 gunicorn
+sseclient-py

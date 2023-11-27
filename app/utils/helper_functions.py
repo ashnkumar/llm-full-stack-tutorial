@@ -46,3 +46,18 @@ def build_prompt(query, context_chunks):
                 prompt_end
             )
     return prompt   
+
+def construct_messages_list(chat_history, prompt):
+    messages = [{"role": "system", "content": "You are a helpful assistant."}]
+    
+    # Populate the messages array with the current chat history
+    for message in chat_history:
+        if message['isBot']:
+            messages.append({"role": "system", "content": message["text"]})
+        else:
+            messages.append({"role": "user", "content": message["text"]})
+
+    # Replace last message with the full prompt
+    messages[-1]["content"] = prompt    
+    
+    return messages

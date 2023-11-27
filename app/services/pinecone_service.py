@@ -30,6 +30,7 @@ def embed_chunks_and_upload_to_pinecone(chunks, index_name):
 
     print(f"\nUploaded {len(chunks)} chunks to Pinecone index\n'{index_name}'.")
 
+
 def get_most_similar_chunks_for_query(query, index_name):
     print("\nEmbedding query using OpenAI ...")
     question_embedding = get_embedding(query)
@@ -40,6 +41,7 @@ def get_most_similar_chunks_for_query(query, index_name):
     context_chunks = [x['metadata']['chunk_text'] for x in query_results['matches']]
 
     return context_chunks   
+
 
 def delete_index(index_name):
   if index_name in pinecone.list_indexes():
