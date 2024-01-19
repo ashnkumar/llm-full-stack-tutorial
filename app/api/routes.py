@@ -11,7 +11,10 @@ PINECONE_INDEX_NAME = 'index237'
 @api_blueprint.route('/handle-query', methods=['POST'])
 def handle_query():
     question = request.json['question']
-    chat_history = request.json['chatHistory']
+    try:
+        chat_history = request.json['chatHistory']
+    except KeyError:
+        chat_history = ""
     
     # Get the most similar chunks from Pinecone
     context_chunks = pinecone_service.get_most_similar_chunks_for_query(question, PINECONE_INDEX_NAME)
