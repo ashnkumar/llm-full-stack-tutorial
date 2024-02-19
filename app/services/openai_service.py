@@ -49,4 +49,3 @@ def construct_llm_payload(question, context_chunks, chat_history):
   }
 
   return headers, data
-
