@@ -1,4 +1,4 @@
-from pinecome import Pinecone, ServerlessSpec
+from pinecone import Pinecone, ServerlessSpec
 from app.services.openai_service import get_embedding
 import os
 

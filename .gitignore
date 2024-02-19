@@ -1,4 +1,6 @@
 myenv/
+env/
+venv/
 .env
 *.py[cod]
 *$py.class
